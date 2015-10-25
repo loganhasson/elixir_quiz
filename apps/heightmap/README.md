@@ -1,5 +1,5 @@
 Heightmap
 =========
 
-Generate heightmaps using either the Perlin Noise or Diamond-Square
-algorithm.
+Generate heightmaps using either the Perlin Noise, Diamond-Square, or
+OpenSimplex algorithm.
