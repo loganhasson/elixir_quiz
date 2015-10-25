@@ -19,8 +19,28 @@ defmodule RunLengthEncoding do
   """
   def encode(string) do
     string
-    |> String.to_char_list
-    |> Stream.chunk_by(&(&1))
+    |> chunk
+    |> Stream.map(&compress/1)
+    |> Enum.join
+  end
+
+  @doc """
+  Same as .encode. Just does it in parallel.
+
+  ## Examples
+
+      iex> RunLengthEncoding.encode("hello")
+      "1h1e2l1o"
+
+      iex> RunLengthEncoding.encode("JJJTTWPPMMMMX")
+      "3J2T1W2P4M1X"
+
+      iex> RunLengthEncoding.encode("ABC")
+      "1A1B1C"
+  """
+  def pencode(string) do
+    string
+    |> chunk
     |> Enum.map(&parallel_compress(&1, self))
     |> Enum.map(&await_compression/1)
     |> Enum.join
@@ -41,6 +61,19 @@ defmodule RunLengthEncoding do
   def compress(char_list) do
     [length(char_list), <<List.first(char_list)>>]
     |> Enum.join
+  end
+
+  @doc """
+  Returns a Stream that will, when run, return a string into a chunked list of
+  char lists.
+
+  ## Examples
+
+      iex> RunLengthEncoding.chunk("hello") |> Enum.into([])
+      ['h', 'e', 'll', 'o']
+  """
+  def chunk(string) do
+    string |> String.to_char_list |> Stream.chunk_by(&(&1))
   end
 
   defp parallel_compress(char_list, parent) do
