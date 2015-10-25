@@ -1,4 +1,0 @@
-ElixirFizzbuzz
-==============
-
-** TODO: Add description **

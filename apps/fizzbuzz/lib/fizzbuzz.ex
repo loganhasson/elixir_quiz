@@ -1,4 +1,4 @@
-defmodule ElixirFizzbuzz do
+defmodule Fizzbuzz do
   @moduledoc """
   Classic FizzBuzz.
   """
@@ -7,7 +7,7 @@ defmodule ElixirFizzbuzz do
 
   ## Examples
 
-      iex> ElixirFizzbuzz.run(16)
+      iex> Fizzbuzz.run(16)
       "1 2 Fizz 4 Buzz Fizz 7 8 Fizz Buzz 11 Fizz 13 14 FizzBuzz 16"
   """
   def run(upper_limit \\ 100) do
