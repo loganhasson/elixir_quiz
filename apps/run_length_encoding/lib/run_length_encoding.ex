@@ -25,6 +25,48 @@ defmodule RunLengthEncoding do
   end
 
   @doc """
+  Decodes a given run-length encoded string.
+
+  ## Examples
+
+      iex> RunLengthEncoding.decode("1h1e2l1o")
+      "hello"
+
+      iex> RunLengthEncoding.decode("3J2T1W2P4M1X")
+      "JJJTTWPPMMMMX"
+
+      iex> RunLengthEncoding.decode("1A1B1C")
+      "ABC"
+  """
+  def decode(string) do
+    string
+    |> scan
+    |> Stream.flat_map(&(&1))
+    |> Stream.map(&expand/1)
+    |> Enum.join
+  end
+
+  @doc """
+  Expands an encoded pair.
+
+  ## Examples
+
+      iex> RunLengthEncoding.expand("1h")
+      "h"
+
+      iex> RunLengthEncoding.expand("7e")
+      "eeeeeee"
+  """
+  def expand(encoded) do
+    count = String.first(encoded) |> String.to_integer
+    String.duplicate(String.last(encoded), count)
+  end
+
+  defp scan(string) do
+    Regex.scan(~r/(?:\d\w)/, string)
+  end
+
+  @doc """
   Same as .encode. Just does it in parallel.
 
   ## Examples
